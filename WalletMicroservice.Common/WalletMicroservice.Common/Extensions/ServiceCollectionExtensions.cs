@@ -144,6 +144,11 @@ namespace WalletMicroservice.Common.Extensions
                 {
                     OnAuthenticationFailed = context =>
                     {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+
                         Console.WriteLine("OnAuthenticationFailed: " + context.Exception.Message);
                         return Task.CompletedTask;
                     },
